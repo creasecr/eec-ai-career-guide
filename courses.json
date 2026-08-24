@@ -1,0 +1,237 @@
+{
+  "center": {
+    "name": "Energy Education Center",
+    "shortName": "EEC",
+    "registrationBaseUrl": "https://www.energyeducationcenter.example/register"
+  },
+  "taxonomy": {
+    "interests": [
+      { "id": "electrical", "label": "Electrical Systems & Power Distribution" },
+      { "id": "renewables", "label": "Renewable Energy (Solar, Wind, Storage)" },
+      { "id": "efficiency", "label": "Energy Efficiency & Building Performance" },
+      { "id": "safety", "label": "Safety & Compliance" },
+      { "id": "data", "label": "Energy Data, Analytics & AI" },
+      { "id": "leadership", "label": "Utility Leadership & Project Management" }
+    ],
+    "levels": [
+      { "id": "beginner", "label": "Beginner - new to the industry" },
+      { "id": "intermediate", "label": "Intermediate - 1-5 years of experience" },
+      { "id": "advanced", "label": "Advanced - senior or specialist" }
+    ],
+    "industries": [
+      { "id": "utility", "label": "Electric or Gas Utility" },
+      { "id": "construction", "label": "Construction & Skilled Trades" },
+      { "id": "commercial", "label": "Commercial & Industrial Facilities" },
+      { "id": "public", "label": "Government, Education & Non-profit" },
+      { "id": "other", "label": "Other / Exploring the industry" }
+    ],
+    "goals": [
+      { "id": "career-change", "label": "Start a career in energy" },
+      { "id": "certification", "label": "Earn a certification or credential" },
+      { "id": "upskill", "label": "Upskill in my current role" },
+      { "id": "leadership", "label": "Move into leadership" }
+    ],
+    "formats": [
+      { "id": "online", "label": "Online" },
+      { "id": "in-person", "label": "In-person" },
+      { "id": "either", "label": "Either works for me" }
+    ]
+  },
+  "courses": [
+    {
+      "id": "EEC-101",
+      "title": "Foundations of the Modern Electric Grid",
+      "level": "beginner",
+      "durationHours": 8,
+      "formats": ["online", "in-person"],
+      "interests": ["electrical", "renewables", "data"],
+      "industries": ["utility", "construction", "commercial", "public", "other"],
+      "goals": ["career-change", "upskill"],
+      "prerequisites": [],
+      "description": "A plain-language introduction to how electricity is generated, transmitted and delivered, including the role of distributed energy resources on today's grid.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-101"
+    },
+    {
+      "id": "EEC-110",
+      "title": "Electrical Safety and NFPA 70E Essentials",
+      "level": "beginner",
+      "durationHours": 6,
+      "formats": ["in-person"],
+      "interests": ["safety", "electrical"],
+      "industries": ["utility", "construction", "commercial"],
+      "goals": ["certification", "upskill", "career-change"],
+      "prerequisites": [],
+      "description": "Hands-on training covering arc flash awareness, personal protective equipment, lockout/tagout and the safe work practices required on energized systems.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-110"
+    },
+    {
+      "id": "EEC-120",
+      "title": "Introduction to Solar Photovoltaic Systems",
+      "level": "beginner",
+      "durationHours": 12,
+      "formats": ["online", "in-person"],
+      "interests": ["renewables", "electrical"],
+      "industries": ["construction", "commercial", "utility", "other"],
+      "goals": ["career-change", "upskill"],
+      "prerequisites": [],
+      "description": "Learn PV system components, site assessment basics, interconnection concepts and the fundamentals of sizing a residential or small commercial array.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-120"
+    },
+    {
+      "id": "EEC-130",
+      "title": "Building Energy Efficiency Fundamentals",
+      "level": "beginner",
+      "durationHours": 8,
+      "formats": ["online"],
+      "interests": ["efficiency", "data"],
+      "industries": ["commercial", "public", "construction", "other"],
+      "goals": ["career-change", "upskill"],
+      "prerequisites": [],
+      "description": "Explore the building envelope, HVAC, lighting and controls, and learn how efficiency measures reduce energy use and utility costs.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-130"
+    },
+    {
+      "id": "EEC-140",
+      "title": "Energy Data Literacy: Reading Meters, Loads and Bills",
+      "level": "beginner",
+      "durationHours": 6,
+      "formats": ["online"],
+      "interests": ["data", "efficiency"],
+      "industries": ["utility", "commercial", "public", "other"],
+      "goals": ["upskill", "career-change"],
+      "prerequisites": [],
+      "description": "Interpret interval meter data, load profiles and rate structures so you can turn raw utility data into actionable insight.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-140"
+    },
+    {
+      "id": "EEC-210",
+      "title": "Distribution System Operations and Troubleshooting",
+      "level": "intermediate",
+      "durationHours": 16,
+      "formats": ["in-person"],
+      "interests": ["electrical", "safety"],
+      "industries": ["utility", "construction"],
+      "goals": ["upskill", "certification"],
+      "prerequisites": ["EEC-101"],
+      "description": "Work through switching, protection coordination, fault location and restoration practices used by distribution operators and field crews.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-210"
+    },
+    {
+      "id": "EEC-220",
+      "title": "Solar Plus Storage Design and Commissioning",
+      "level": "intermediate",
+      "durationHours": 20,
+      "formats": ["online", "in-person"],
+      "interests": ["renewables", "electrical"],
+      "industries": ["construction", "commercial", "utility"],
+      "goals": ["certification", "upskill"],
+      "prerequisites": ["EEC-120"],
+      "description": "Design paired PV and battery systems, size inverters and enclosures, and follow commissioning and inspection workflows end to end.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-220"
+    },
+    {
+      "id": "EEC-230",
+      "title": "Commercial Energy Auditing and Measurement & Verification",
+      "level": "intermediate",
+      "durationHours": 18,
+      "formats": ["online", "in-person"],
+      "interests": ["efficiency", "data"],
+      "industries": ["commercial", "public", "utility"],
+      "goals": ["certification", "upskill"],
+      "prerequisites": ["EEC-130"],
+      "description": "Conduct ASHRAE Level I and II audits, build savings calculations and document results using industry-standard M&V protocols.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-230"
+    },
+    {
+      "id": "EEC-240",
+      "title": "Analytics and Machine Learning for Energy Professionals",
+      "level": "intermediate",
+      "durationHours": 14,
+      "formats": ["online"],
+      "interests": ["data", "efficiency", "renewables"],
+      "industries": ["utility", "commercial", "public", "other"],
+      "goals": ["upskill", "career-change"],
+      "prerequisites": ["EEC-140"],
+      "description": "Apply forecasting, anomaly detection and visualization techniques to load, weather and asset data with no prior coding background required.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-240"
+    },
+    {
+      "id": "EEC-250",
+      "title": "Safety Leadership for Field Supervisors",
+      "level": "intermediate",
+      "durationHours": 10,
+      "formats": ["in-person"],
+      "interests": ["safety", "leadership"],
+      "industries": ["utility", "construction", "commercial"],
+      "goals": ["leadership", "upskill"],
+      "prerequisites": ["EEC-110"],
+      "description": "Build the coaching, job-briefing and incident investigation skills supervisors need to sustain a strong safety culture in the field.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-250"
+    },
+    {
+      "id": "EEC-310",
+      "title": "Grid Modernization and DER Integration",
+      "level": "advanced",
+      "durationHours": 24,
+      "formats": ["online", "in-person"],
+      "interests": ["electrical", "renewables", "data"],
+      "industries": ["utility", "commercial", "public"],
+      "goals": ["upskill", "leadership"],
+      "prerequisites": ["EEC-210"],
+      "description": "Plan hosting capacity, advanced distribution management systems and DER interconnection strategy for a high-renewables grid.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-310"
+    },
+    {
+      "id": "EEC-320",
+      "title": "Utility-Scale Renewable Project Development",
+      "level": "advanced",
+      "durationHours": 24,
+      "formats": ["in-person"],
+      "interests": ["renewables", "leadership"],
+      "industries": ["utility", "commercial", "public"],
+      "goals": ["leadership", "upskill"],
+      "prerequisites": ["EEC-220"],
+      "description": "Take a project from site control and interconnection queue through financing, procurement and construction management.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-320"
+    },
+    {
+      "id": "EEC-330",
+      "title": "Certified Energy Manager (CEM) Exam Preparation",
+      "level": "advanced",
+      "durationHours": 30,
+      "formats": ["online", "in-person"],
+      "interests": ["efficiency", "data", "leadership"],
+      "industries": ["commercial", "public", "utility"],
+      "goals": ["certification", "leadership"],
+      "prerequisites": ["EEC-230"],
+      "description": "An intensive review of energy accounting, thermal systems, procurement and project economics aligned to the CEM exam blueprint.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-330"
+    },
+    {
+      "id": "EEC-340",
+      "title": "Energy Program and Portfolio Management",
+      "level": "advanced",
+      "durationHours": 20,
+      "formats": ["online"],
+      "interests": ["leadership", "efficiency", "data"],
+      "industries": ["utility", "public", "commercial"],
+      "goals": ["leadership", "certification"],
+      "prerequisites": ["EEC-240"],
+      "description": "Lead multi-million dollar efficiency and electrification portfolios, covering budgeting, regulatory reporting and stakeholder engagement.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-340"
+    },
+    {
+      "id": "EEC-350",
+      "title": "Advanced Arc Flash Study and Compliance Auditing",
+      "level": "advanced",
+      "durationHours": 16,
+      "formats": ["in-person"],
+      "interests": ["safety", "electrical"],
+      "industries": ["utility", "construction", "commercial"],
+      "goals": ["certification", "leadership"],
+      "prerequisites": ["EEC-250"],
+      "description": "Perform incident energy analysis, label facilities to current standards and audit an electrical safety program against NFPA 70E and OSHA requirements.",
+      "registrationUrl": "https://www.energyeducationcenter.example/register/EEC-350"
+    }
+  ]
+}
