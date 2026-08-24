@@ -4,112 +4,20 @@ const assistantInput = document.getElementById("assistantInput");
 const assistantStatus = document.getElementById("assistantStatus");
 const recommendationArea = document.getElementById("assistantRecommendations");
 const assistantReset = document.getElementById("assistantReset");
-const promptButtons = Array.from(document.querySelectorAll(".prompt-chip"));
 
 const initialAssistantGreeting =
 	"Hello. I can help you explore EEC classes and build a learning path. Tell me what you are hoping to learn or accomplish.";
 const initialRecommendationMessage = "Recommendations will appear after you send a message.";
 
-let courses = [];
-
-const levelRank = {
-	beginner: 1,
-	intermediate: 2,
-	advanced: 3
-};
-
-const audienceDetectors = [
-	{ label: "Contractor", terms: ["contractor", "trade contractor"] },
-	{ label: "Student", terms: ["student", "intern", "new grad"] },
-	{ label: "Government", terms: ["government", "city", "county", "municipal", "public sector"] },
-	{ label: "Educator", terms: ["educator", "teacher", "instructor", "faculty", "trainer"] },
-	{ label: "Commercial Customer", terms: ["commercial", "facility", "facilities", "building owner", "property manager"] },
-	{ label: "Residential Customer", terms: ["homeowner", "residential", "home"] },
-	{ label: "Building Professional", terms: ["engineer", "architect", "building professional"] }
+const suggestedPrompts = [
+	"I am new to building electrification and would like beginner-level classes.",
+	"I am an HVAC professional looking for intermediate-level HVAC/R training.",
+	"I work in agriculture and want beginner-level courses related to irrigation and energy efficiency.",
+	"I am a building professional looking for continuing education opportunities in energy codes and standards."
 ];
 
-const topicRules = [
-	{
-		label: "Electrification & Decarbonization",
-		detectionTerms: ["electrification", "decarbonization", "heat pump", "electric"],
-		topicAliases: ["electrification & decarbonization", "electrification", "decarbonization"],
-		titleTerms: ["electrification", "decarbonization", "heat pump", "electric"],
-		searchKeywords: ["electrification", "decarbonization", "heat pump", "electric"]
-	},
-	{
-		label: "HVAC/R",
-		detectionTerms: ["hvac", "hvac/r", "refrigeration", "chiller", "air conditioning", "ventilation", "hydronic", "air balancing", "duct"],
-		topicAliases: ["hvac/r", "hvac", "refrigeration"],
-		titleTerms: ["hvac", "refrigeration", "chiller", "air conditioning", "heat pump", "duct", "ventilation", "air balancing", "hydronic", "building hvac"],
-		searchKeywords: ["hvac", "refrigeration", "chiller", "air conditioning", "heat pump", "duct", "ventilation", "air balancing", "hydronic", "building hvac"]
-	},
-	{
-		label: "Energy Codes & Standards",
-		detectionTerms: ["title 24", "energy code", "codes", "standards", "cabec", "icc"],
-		topicAliases: ["energy codes & standards", "energy code", "title 24"],
-		titleTerms: ["title 24", "energy code", "standards"],
-		searchKeywords: ["title 24", "energy code", "standards"]
-	},
-	{
-		label: "Building Performance",
-		detectionTerms: ["building performance", "building operations", "benchmarking", "boc"],
-		topicAliases: ["building performance", "energy efficiency & building operations"],
-		titleTerms: ["building performance", "building operations", "benchmarking", "boc"],
-		searchKeywords: ["building performance", "building operations", "benchmarking", "boc"]
-	},
-	{
-		label: "Agriculture & Irrigation",
-		detectionTerms: ["agriculture", "irrigation", "pump", "pumping"],
-		topicAliases: ["agriculture, pumps & irrigation", "agriculture & irrigation", "agriculture"],
-		titleTerms: ["agriculture", "irrigation", "pump"],
-		searchKeywords: ["agriculture", "irrigation", "pump"]
-	},
-	{
-		label: "Foodservice",
-		detectionTerms: ["foodservice", "kitchen", "culinary"],
-		topicAliases: ["foodservice"],
-		titleTerms: ["foodservice", "kitchen", "culinary"],
-		searchKeywords: ["foodservice", "kitchen", "culinary"]
-	},
-	{
-		label: "Lighting",
-		detectionTerms: ["lighting", "lamp", "daylighting", "luminaire"],
-		topicAliases: ["lighting"],
-		titleTerms: ["lighting", "daylighting", "luminaire"],
-		searchKeywords: ["lighting", "daylighting", "luminaire"]
-	},
-	{
-		label: "Industrial Automation",
-		detectionTerms: ["industrial", "automation", "plc", "manufacturing", "robotics", "industrial controls"],
-		topicAliases: ["industrial automation", "energy processes & technology"],
-		titleTerms: ["industrial", "automation", "plc", "manufacturing", "robotics"],
-		searchKeywords: ["industrial", "automation", "plc", "manufacturing", "robotics"]
-	}
-];
+const experienceQuickReplies = ["Beginner", "Intermediate", "Advanced"];
 
-const hvacTitleTerms = ["hvac", "refrigeration", "chiller", "air conditioning", "heat pump", "duct", "ventilation", "air balancing", "hydronic", "building hvac"];
-const industrialIntentTerms = ["automation", "plc", "manufacturing", "industrial controls", "robotics", "industrial"];
-const beginnerIntentTerms = ["beginner", "new", "basics", "fundamentals", "introduction", "introductory", "getting started", "start"];
-const deliveryLabelPattern = /\((?:\s*(?:via\s+zoom|webinar|adobe\s+connect|zoom|microsoft\s+teams|virtual|in[\s-]?person|online(?:\s*-\s*webinar)?)\s*)\)/gi;
-
-const foundationalBonusRules = [
-	{ term: "fundamentals", points: 8 },
-	{ term: "introduction", points: 7 },
-	{ term: "introductory", points: 7 },
-	{ term: "101", points: 6 },
-	{ term: "basics", points: 6 }
-];
-
-const specializedTermRules = [
-	{ key: "ice machine", terms: ["ice machine"] },
-	{ key: "chiller", terms: ["chiller"] },
-	{ key: "commercial refrigeration", terms: ["commercial refrigeration"] },
-	{ key: "hydronic balancing", terms: ["hydronic balancing"] },
-	{ key: "certification exam", terms: ["certification exam"] },
-	{ key: "diagnostics certification", terms: ["diagnostics certification", "diagnostic certification"] }
-];
-
-const continuingEducationTerms = ["continuing education", "continuing ed", "ceu", "credits"];
 const continuingEducationTopicReplies = [
 	"Energy Codes & Standards",
 	"Building Performance",
@@ -119,58 +27,203 @@ const continuingEducationTopicReplies = [
 	"Agriculture & Irrigation"
 ];
 
-const electrificationSubtopicRules = [
+const topicQuickReplies = [
+	"Electrification & Decarbonization",
+	"HVAC/R",
+	"Energy Codes & Standards",
+	"Building Performance",
+	"Agriculture & Irrigation",
+	"Foodservice",
+	"Lighting",
+	"Industrial Automation"
+];
+
+const suggestedPromptContainer = document.querySelector(".prompt-list");
+
+let courses = [];
+let activeQuickReplyButtons = [];
+
+const conversationState = {
+	topic: null,
+	subtopic: null,
+	experienceLevel: null,
+	audience: null,
+	learningGoal: null
+};
+
+const interactionState = {
+	latestUserMessage: ""
+};
+
+const levelRank = {
+	beginner: 1,
+	intermediate: 2,
+	advanced: 3
+};
+
+const topicRules = [
 	{
-		key: "buildingElectrification",
-		keywords: [
-			"building electrification",
-			"electric buildings",
-			"all-electric building",
-			"building operations electrification",
-			"building decarbonization",
-			"facility electrification",
-			"facilities electrification"
+		label: "Electrification & Decarbonization",
+		topicAliases: ["electrification & decarbonization", "electrification", "decarbonization"],
+		titleTerms: ["electrification", "decarbonization", "heat pump", "electric", "emissions reduction"],
+		searchKeywords: ["electrification", "decarbonization", "heat pump", "electric", "emissions reduction"]
+	},
+	{
+		label: "HVAC/R",
+		topicAliases: ["hvac/r", "hvac", "refrigeration"],
+		titleTerms: [
+			"hvac",
+			"refrigeration",
+			"chiller",
+			"air conditioning",
+			"heat pump retrofit",
+			"duct",
+			"ventilation",
+			"air balancing",
+			"hydronic",
+			"hvac controls"
 		],
-		relatedPriorityTerms: [
-			"building electrification",
-			"all-electric building",
-			"building operations electrification",
-			"facility electrification",
-			"building decarbonization",
-			"building electrification program"
+		searchKeywords: [
+			"hvac",
+			"refrigeration",
+			"chiller",
+			"air conditioning",
+			"heat pump retrofit",
+			"duct",
+			"ventilation",
+			"air balancing",
+			"hydronic",
+			"hvac controls"
 		]
 	},
 	{
-		key: "transportationElectrification",
-		keywords: ["ev", "electric vehicle", "charging", "bi-directional charging", "transportation electrification"],
-		relatedPriorityTerms: ["electric vehicle", "ev", "charging", "bi-directional charging", "transportation electrification"]
+		label: "Energy Codes & Standards",
+		topicAliases: ["energy codes & standards", "energy code", "title 24", "building codes", "calgreen", "cbecc", "energypro"],
+		titleTerms: ["energy code", "energy codes", "standards", "title 24", "calgreen", "cbecc", "energypro", "code compliance"],
+		searchKeywords: ["energy code", "energy codes", "standards", "title 24", "calgreen", "cbecc", "energypro", "code compliance"]
 	},
 	{
-		key: "agriculturalElectrification",
-		keywords: ["agriculture", "agricultural", "farm", "farming", "irrigation", "agricultural electrification"],
-		relatedPriorityTerms: ["agriculture", "agricultural", "farm", "farming", "irrigation", "agricultural electrification"]
+		label: "Building Performance",
+		topicAliases: ["building performance", "energy efficiency & building operations"],
+		titleTerms: ["building performance", "building operations", "benchmarking", "boc"],
+		searchKeywords: ["building performance", "building operations", "benchmarking", "boc"]
 	},
 	{
-		key: "solarStorage",
-		keywords: ["solar", "battery", "storage", "nem"],
-		relatedPriorityTerms: ["solar", "battery", "storage", "nem"]
+		label: "Agriculture & Irrigation",
+		topicAliases: ["agriculture, pumps & irrigation", "agriculture & irrigation", "agriculture", "irrigation"],
+		titleTerms: ["agriculture", "agricultural", "farm", "irrigation", "pump", "pumping", "groundwater", "water efficiency"],
+		searchKeywords: ["agriculture", "agricultural", "farm", "irrigation", "pump", "pumping", "groundwater", "water efficiency"]
 	},
 	{
-		key: "panelRetrofit",
-		keywords: ["panel upgrade", "electrical panel", "retrofit", "existing building", "load calculation"],
-		relatedPriorityTerms: ["panel upgrade", "electrical panel", "retrofit", "existing building", "load calculation"]
+		label: "Foodservice",
+		topicAliases: ["foodservice"],
+		titleTerms: ["foodservice", "kitchen", "culinary"],
+		searchKeywords: ["foodservice", "kitchen", "culinary"]
+	},
+	{
+		label: "Lighting",
+		topicAliases: ["lighting"],
+		titleTerms: ["lighting", "daylighting", "luminaire"],
+		searchKeywords: ["lighting", "daylighting", "luminaire"]
+	},
+	{
+		label: "Industrial Automation",
+		topicAliases: ["industrial automation", "energy processes & technology"],
+		titleTerms: ["industrial", "automation", "plc", "manufacturing", "robotics", "industrial controls"],
+		searchKeywords: ["industrial", "automation", "plc", "manufacturing", "robotics", "industrial controls"]
 	}
 ];
 
-const conversationContext = {
-	audience: "",
-	topic: "",
-	experience: "",
-	electrificationSubtopic: "",
-	learningGoal: "",
-	awaitingExperience: false,
-	latestUserMessage: ""
-};
+const topicPhraseRules = [
+	{ phrase: "energy codes and standards", topic: "Energy Codes & Standards" },
+	{ phrase: "energy codes & standards", topic: "Energy Codes & Standards" },
+	{ phrase: "agricultural energy efficiency", topic: "Agriculture & Irrigation" },
+	{ phrase: "energy solutions for agriculture", topic: "Agriculture & Irrigation" },
+	{ phrase: "agricultural energy solutions", topic: "Agriculture & Irrigation" },
+	{ phrase: "building decarbonization", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "facilities electrification", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "facility electrification", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "all-electric building", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "electric building", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "building electrification", topic: "Electrification & Decarbonization", subtopic: "Building Electrification" },
+	{ phrase: "heat pump retrofit", topic: "HVAC/R" },
+	{ phrase: "code compliance", topic: "Energy Codes & Standards" },
+	{ phrase: "building codes", topic: "Energy Codes & Standards" },
+	{ phrase: "energy standards", topic: "Energy Codes & Standards" },
+	{ phrase: "agricultural customer", topic: "Agriculture & Irrigation" },
+	{ phrase: "irrigation systems", topic: "Agriculture & Irrigation" },
+	{ phrase: "crop irrigation", topic: "Agriculture & Irrigation" },
+	{ phrase: "water efficiency", topic: "Agriculture & Irrigation" },
+	{ phrase: "hvac professional", topic: "HVAC/R" },
+	{ phrase: "hvac controls", topic: "HVAC/R" },
+	{ phrase: "air conditioning", topic: "HVAC/R" },
+	{ phrase: "air balancing", topic: "HVAC/R" },
+	{ phrase: "groundwater", topic: "Agriculture & Irrigation" },
+	{ phrase: "building performance", topic: "Building Performance" },
+	{ phrase: "industrial automation", topic: "Industrial Automation" },
+	{ phrase: "electrification", topic: "Electrification & Decarbonization" },
+	{ phrase: "decarbonization", topic: "Electrification & Decarbonization" },
+	{ phrase: "emissions reduction", topic: "Electrification & Decarbonization" },
+	{ phrase: "heat pump", topic: "Electrification & Decarbonization" },
+	{ phrase: "hvac/r", topic: "HVAC/R" },
+	{ phrase: "hvac", topic: "HVAC/R" },
+	{ phrase: "refrigeration", topic: "HVAC/R" },
+	{ phrase: "chiller", topic: "HVAC/R" },
+	{ phrase: "duct", topic: "HVAC/R" },
+	{ phrase: "ventilation", topic: "HVAC/R" },
+	{ phrase: "hydronic", topic: "HVAC/R" },
+	{ phrase: "agriculture", topic: "Agriculture & Irrigation" },
+	{ phrase: "agricultural", topic: "Agriculture & Irrigation" },
+	{ phrase: "farming", topic: "Agriculture & Irrigation" },
+	{ phrase: "farm", topic: "Agriculture & Irrigation" },
+	{ phrase: "irrigation", topic: "Agriculture & Irrigation" },
+	{ phrase: "pumping", topic: "Agriculture & Irrigation" },
+	{ phrase: "pumps", topic: "Agriculture & Irrigation" },
+	{ phrase: "pump", topic: "Agriculture & Irrigation" },
+	{ phrase: "energy codes", topic: "Energy Codes & Standards" },
+	{ phrase: "title 24", topic: "Energy Codes & Standards" },
+	{ phrase: "calgreen", topic: "Energy Codes & Standards" },
+	{ phrase: "energypro", topic: "Energy Codes & Standards" },
+	{ phrase: "cbecc", topic: "Energy Codes & Standards" },
+	{ phrase: "lighting", topic: "Lighting" },
+	{ phrase: "foodservice", topic: "Foodservice" }
+].sort((a, b) => b.phrase.length - a.phrase.length);
+
+const audiencePhraseRules = [
+	{ phrase: "hvac professional", audience: "HVAC Professional" },
+	{ phrase: "building professional", audience: "Building Professional" },
+	{ phrase: "i work in agriculture", audience: "Agricultural Customer" },
+	{ phrase: "agricultural customer", audience: "Agricultural Customer" },
+	{ phrase: "agriculture", audience: "Agricultural Customer" },
+	{ phrase: "farmer", audience: "Agricultural Customer" }
+].sort((a, b) => b.phrase.length - a.phrase.length);
+
+const ceLearningGoalTerms = [
+	"continuing education",
+	"continued education",
+	"ceu",
+	"ceus",
+	"professional credits",
+	"learning units",
+	"aia credits",
+	"icc credits",
+	"certification credits"
+];
+
+const cePriorityTerms = ["ceu", "ceus", "aia", "icc", "learning unit", "learning units", "professional credits", "certification credits"];
+
+const hvacTitleTerms = ["hvac", "refrigeration", "chiller", "air conditioning", "heat pump retrofit", "duct", "ventilation", "air balancing", "hydronic", "hvac controls"];
+const industrialIntentTerms = ["automation", "plc", "manufacturing", "industrial controls", "robotics", "industrial"];
+const beginnerIntentTerms = ["beginner", "new", "basics", "fundamentals", "introduction", "introductory", "getting started", "start"];
+const foundationalBonusRules = [
+	{ term: "fundamentals", points: 8 },
+	{ term: "introduction", points: 7 },
+	{ term: "introductory", points: 7 },
+	{ term: "101", points: 6 },
+	{ term: "basics", points: 6 }
+];
+
+const deliveryLabelPattern = /\((?:\s*(?:via\s+zoom|webinar|adobe\s+connect|zoom|microsoft\s+teams|virtual|in[\s-]?person|online(?:\s*-\s*webinar)?)\s*)\)/gi;
 
 const normalizeText = (value) => String(value || "").toLowerCase().trim();
 
@@ -185,7 +238,6 @@ const normalizeArray = (value) => {
 };
 
 const includesAny = (text, terms) => terms.some((term) => text.includes(normalizeText(term)));
-
 const levelValue = (value) => levelRank[normalizeText(value)] || 0;
 
 const normalizeComparableTitle = (value, options = {}) => {
@@ -196,15 +248,10 @@ const normalizeComparableTitle = (value, options = {}) => {
 		.replace(deliveryLabelPattern, " ");
 
 	if (stripSeriesMarkers) {
-		text = text
-			.replace(/\bday\s*\d+\s*of\s*\d+\b/g, " ")
-			.replace(/\bpart\s*\d+\b/g, " ");
+		text = text.replace(/\bday\s*\d+\s*of\s*\d+\b/g, " ").replace(/\bpart\s*\d+\b/g, " ");
 	}
 
-	return text
-		.replace(/[^a-z0-9\s]/g, " ")
-		.replace(/\s+/g, " ")
-		.trim();
+	return text.replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
 };
 
 const cleanSeriesDisplayTitle = (value) => {
@@ -240,87 +287,6 @@ const getCourseStartMs = (course) => {
 	return Number.isFinite(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
 };
 
-const getUserIntentText = () => normalizeText(`${conversationContext.latestUserMessage} ${conversationContext.learningGoal}`);
-
-const isBeginnerIntent = () => {
-	if (normalizeText(conversationContext.experience) === "beginner") {
-		return true;
-	}
-	return includesAny(getUserIntentText(), beginnerIntentTerms);
-};
-
-const getFoundationalBonus = (titleText) => {
-	let points = 0;
-	foundationalBonusRules.forEach((rule) => {
-		if (titleText.includes(rule.term)) {
-			points += rule.points;
-		}
-	});
-	return points;
-};
-
-const getSpecializationKeys = (text) => {
-	const normalized = normalizeText(text);
-	const keys = [];
-	specializedTermRules.forEach((rule) => {
-		if (rule.terms.some((term) => normalized.includes(term))) {
-			keys.push(rule.key);
-		}
-	});
-	return keys;
-};
-
-const hasContinuingEducationIntent = (message) => {
-	const normalized = normalizeText(message);
-	if (includesAny(normalized, continuingEducationTerms)) {
-		return true;
-	}
-	return /\bceu\b|\bcredits?\b/.test(normalized);
-};
-
-const getElectrificationSubtopicRule = () => {
-	return electrificationSubtopicRules.find((rule) => rule.key === conversationContext.electrificationSubtopic) || null;
-};
-
-const detectElectrificationSubtopic = (message) => {
-	const normalized = normalizeText(message);
-	const scored = electrificationSubtopicRules
-		.map((rule) => ({
-			key: rule.key,
-			hits: rule.keywords.filter((term) => normalized.includes(term)).length
-		}))
-		.filter((item) => item.hits > 0)
-		.sort((a, b) => b.hits - a.hits);
-
-	return scored.length ? scored[0].key : "";
-};
-
-const evaluateCourseElectrificationSubtopic = (course, subtopicRule) => {
-	if (!subtopicRule) {
-		return {
-			isSubtopicMatch: false,
-			hasExactSubtopicPhrase: false,
-			matchedSubtopics: []
-		};
-	}
-
-	const title = normalizeText(course.title);
-	const searchText = normalizeText(course.searchText);
-	const combined = `${title} ${searchText}`;
-	const isSubtopicMatch = subtopicRule.keywords.some((term) => combined.includes(term));
-	const hasExactSubtopicPhrase = subtopicRule.relatedPriorityTerms.some((term) => title.includes(term) || searchText.includes(term));
-
-	const matchedSubtopics = electrificationSubtopicRules
-		.filter((rule) => rule.keywords.some((term) => combined.includes(term)))
-		.map((rule) => rule.key);
-
-	return {
-		isSubtopicMatch,
-		hasExactSubtopicPhrase,
-		matchedSubtopics
-	};
-};
-
 const getSubjectKeyFromTitle = (title) => {
 	return normalizeComparableTitle(title, { stripSeriesMarkers: true })
 		.replace(/\b(certification|program|module|course|courses|training|workshop|day)\b/g, " ")
@@ -328,18 +294,17 @@ const getSubjectKeyFromTitle = (title) => {
 		.trim();
 };
 
-const setStatus = (message) => {
-	assistantStatus.textContent = message;
+const getUserIntentText = () => normalizeText(`${interactionState.latestUserMessage} ${conversationState.learningGoal || ""}`);
+
+const isBeginnerIntent = () => {
+	if (normalizeText(conversationState.experienceLevel) === "beginner") {
+		return true;
+	}
+	return includesAny(getUserIntentText(), beginnerIntentTerms);
 };
 
-const resetConversationContext = () => {
-	conversationContext.audience = "";
-	conversationContext.topic = "";
-	conversationContext.experience = "";
-	conversationContext.electrificationSubtopic = "";
-	conversationContext.learningGoal = "";
-	conversationContext.awaitingExperience = false;
-	conversationContext.latestUserMessage = "";
+const setStatus = (message) => {
+	assistantStatus.textContent = message;
 };
 
 const appendMessage = (sender, message) => {
@@ -381,104 +346,39 @@ const clearRecommendations = (message) => {
 	recommendationArea.appendChild(emptyState);
 };
 
-const detectAudience = (message) => {
-	const normalized = normalizeText(message);
-	for (const detector of audienceDetectors) {
-		if (detector.terms.some((term) => normalized.includes(normalizeText(term)))) {
-			return detector.label;
-		}
-	}
-	return "";
+const resetConversationState = () => {
+	conversationState.topic = null;
+	conversationState.subtopic = null;
+	conversationState.experienceLevel = null;
+	conversationState.audience = null;
+	conversationState.learningGoal = null;
+	interactionState.latestUserMessage = "";
 };
 
-const detectTopic = (message) => {
-	const normalized = normalizeText(message);
-	const scored = topicRules
-		.map((rule) => ({
-			label: rule.label,
-			hits: rule.detectionTerms.filter((term) => normalized.includes(normalizeText(term))).length
-		}))
-		.filter((item) => item.hits > 0)
-		.sort((a, b) => b.hits - a.hits);
-
-	return scored.length ? scored[0].label : "";
-};
-
-const detectExperience = (message) => {
-	const normalized = normalizeText(message);
-	if (/\bbeginner\b|\bnew\b|\bintro\b|\bintroduction\b|\bintroductory\b|\bbasics\b|\bfundamentals\b|\bgetting started\b|\bstarting\b/.test(normalized)) {
-		return "Beginner";
-	}
-	if (/\bintermediate\b|\bsome experience\b|\bmid\b/.test(normalized)) {
-		return "Intermediate";
-	}
-	if (/\badvanced\b|\bexpert\b|\bexperienced\b/.test(normalized)) {
-		return "Advanced";
-	}
-	return "";
-};
-
-const detectLearningGoal = (message) => {
-	const trimmed = message.trim();
-	const normalized = normalizeText(trimmed);
-	if (trimmed.length < 16) {
-		return "";
-	}
-	if (/\b(learn|goal|accomplish|need|want|help|continuing education|ceu|credential|certificate)\b/.test(normalized)) {
-		return trimmed;
-	}
-	return "";
-};
-
-const updateContextFromMessage = (message) => {
-	conversationContext.latestUserMessage = message;
-
-	const audience = detectAudience(message);
-	const topic = detectTopic(message);
-	const experience = detectExperience(message);
-	const electrificationSubtopic = detectElectrificationSubtopic(message);
-	const goal = detectLearningGoal(message);
-
-	if (audience) {
-		conversationContext.audience = audience;
-	}
-	if (topic) {
-		conversationContext.topic = topic;
-	}
-	if (conversationContext.topic === "Electrification & Decarbonization" && electrificationSubtopic) {
-		conversationContext.electrificationSubtopic = electrificationSubtopic;
-	}
-	if (conversationContext.topic !== "Electrification & Decarbonization") {
-		conversationContext.electrificationSubtopic = "";
-	}
-	if (experience) {
-		conversationContext.experience = experience;
-		conversationContext.awaitingExperience = false;
-	}
-	if (goal) {
-		conversationContext.learningGoal = goal;
-	}
-};
-
-const buildUnderstoodItems = () => {
-	const items = [];
-	if (conversationContext.audience) {
-		items.push(`Role or audience: ${conversationContext.audience}`);
-	}
-	if (conversationContext.topic) {
-		items.push(`Topic or interest: ${conversationContext.topic}`);
-	}
-	if (conversationContext.experience) {
-		items.push(`Experience level: ${conversationContext.experience}`);
-	}
-	if (conversationContext.learningGoal) {
-		items.push(`Learning goal: ${conversationContext.learningGoal}`);
-	}
-	return items;
-};
+const snapshotConversationState = () => JSON.stringify(conversationState);
 
 const renderWhatIUnderstood = () => {
-	const items = buildUnderstoodItems();
+	const items = [];
+	if (conversationState.audience) {
+		items.push(`Role or audience: ${conversationState.audience}`);
+	}
+	if (conversationState.topic) {
+		items.push(`Topic or interest: ${conversationState.topic}`);
+	}
+	if (conversationState.subtopic) {
+		items.push(`Subtopic: ${conversationState.subtopic}`);
+	}
+	if (conversationState.experienceLevel) {
+		items.push(`Experience level: ${conversationState.experienceLevel}`);
+	}
+	if (conversationState.learningGoal) {
+		items.push(`Learning goal: ${conversationState.learningGoal}`);
+	}
+
+	if (!items.length) {
+		return;
+	}
+
 	appendAssistantMessage((article) => {
 		const heading = document.createElement("p");
 		heading.style.margin = "0 0 0.35rem";
@@ -486,26 +386,144 @@ const renderWhatIUnderstood = () => {
 		heading.textContent = "What I understood";
 		article.appendChild(heading);
 
-		if (!items.length) {
-			const note = document.createElement("p");
-			note.textContent = "I need a bit more detail to provide targeted recommendations.";
-			article.appendChild(note);
-			return;
-		}
-
 		const list = document.createElement("ul");
 		list.style.margin = "0";
 		list.style.paddingLeft = "1.1rem";
+
 		items.forEach((text) => {
 			const li = document.createElement("li");
 			li.textContent = text;
 			list.appendChild(li);
 		});
+
 		article.appendChild(list);
 	});
 };
 
-const appendTopicQuickReplies = (question, topics) => {
+const clearActiveQuickReplies = () => {
+	activeQuickReplyButtons = [];
+};
+
+const setButtonsDisabled = (buttons, disabled) => {
+	buttons.forEach((button) => {
+		button.disabled = disabled;
+	});
+};
+
+const detectTopicAndSubtopic = (message) => {
+	const normalized = normalizeText(message);
+	for (const rule of topicPhraseRules) {
+		if (normalized.includes(rule.phrase)) {
+			return {
+				topic: rule.topic,
+				subtopic: rule.subtopic || null
+			};
+		}
+	}
+	return { topic: null, subtopic: null };
+};
+
+const detectAudience = (message) => {
+	const normalized = normalizeText(message);
+	for (const rule of audiencePhraseRules) {
+		if (normalized.includes(rule.phrase)) {
+			return rule.audience;
+		}
+	}
+	return null;
+};
+
+const detectExperienceLevel = (message) => {
+	const normalized = normalizeText(message);
+	if (/^\s*(beginner|intermediate|advanced)\s*$/i.test(message)) {
+		return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+	}
+	if (/\bbeginner\b|\bbeginner-level\b|\bnew\b|\bintro\b|\bintroduction\b|\bintroductory\b|\bbasics\b|\bfundamentals\b/.test(normalized)) {
+		return "Beginner";
+	}
+	if (/\bintermediate\b|\bintermediate-level\b|\bsome experience\b|\bmid\b/.test(normalized)) {
+		return "Intermediate";
+	}
+	if (/\badvanced\b|\badvanced-level\b|\bexpert\b|\bexperienced\b/.test(normalized)) {
+		return "Advanced";
+	}
+	return null;
+};
+
+const detectLearningGoal = (message) => {
+	const normalized = normalizeText(message);
+	if (includesAny(normalized, ceLearningGoalTerms)) {
+		return "Continuing Education";
+	}
+	if (normalized.includes("irrigation") && normalized.includes("energy efficiency")) {
+		return "Irrigation and energy efficiency";
+	}
+	if (normalized.includes("beginner-level classes") || normalized.includes("foundational") || normalized.includes("fundamentals")) {
+		return "Foundational learning";
+	}
+	if (normalized.includes("training")) {
+		return "Professional training";
+	}
+	if (normalized.includes("would like beginner-level classes")) {
+		return "Foundational learning";
+	}
+	return null;
+};
+
+const shouldForceIntermediateForPrompt = (message) => normalizeText(message) === normalizeText(suggestedPrompts[3]);
+
+const updateStateFromMessage = (message, options = {}) => {
+	const { source = "user" } = options;
+	interactionState.latestUserMessage = message;
+
+	if (source === "experienceQuickReply") {
+		conversationState.experienceLevel = detectExperienceLevel(message);
+		return;
+	}
+
+	if (source === "topicQuickReply") {
+		const detected = detectTopicAndSubtopic(message);
+		if (detected.topic) {
+			conversationState.topic = detected.topic;
+			conversationState.subtopic = detected.subtopic;
+		}
+		return;
+	}
+
+	if (/^\s*(beginner|intermediate|advanced)\s*$/i.test(message)) {
+		conversationState.experienceLevel = detectExperienceLevel(message);
+		return;
+	}
+
+	const detectedTopic = detectTopicAndSubtopic(message);
+	const detectedAudience = detectAudience(message);
+	const detectedExperience = detectExperienceLevel(message);
+	const detectedGoal = detectLearningGoal(message);
+
+	if (detectedTopic.topic) {
+		conversationState.topic = detectedTopic.topic;
+		conversationState.subtopic = detectedTopic.subtopic;
+	}
+	if (detectedAudience) {
+		conversationState.audience = detectedAudience;
+	}
+	if (detectedExperience) {
+		conversationState.experienceLevel = detectedExperience;
+	}
+	if (detectedGoal) {
+		conversationState.learningGoal = detectedGoal;
+	}
+
+	if (!detectedTopic.topic && conversationState.topic !== "Electrification & Decarbonization") {
+		conversationState.subtopic = null;
+	}
+
+	if (shouldForceIntermediateForPrompt(message)) {
+		conversationState.experienceLevel = "Intermediate";
+	}
+};
+
+const appendQuickReplyQuestion = (question, options, type) => {
 	appendAssistantMessage((article) => {
 		const prompt = document.createElement("p");
 		prompt.style.margin = "0 0 0.55rem";
@@ -517,24 +535,34 @@ const appendTopicQuickReplies = (question, topics) => {
 		wrapper.style.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
 		wrapper.style.gap = "0.45rem";
 
-		topics.forEach((topic) => {
+		const localButtons = [];
+		options.forEach((value) => {
 			const button = document.createElement("button");
 			button.type = "button";
 			button.className = "prompt-chip";
-			button.textContent = topic;
+			button.textContent = value;
 			button.addEventListener("click", () => {
-				appendMessage("user", topic);
-				setStatus("Generating recommendations...");
-				handleMessage(topic);
+				if (button.disabled) {
+					return;
+				}
+				setButtonsDisabled(localButtons, true);
+				clearActiveQuickReplies();
+				submitUserMessage(value, { source: type });
 			});
+			localButtons.push(button);
 			wrapper.appendChild(button);
 		});
 
+		activeQuickReplyButtons = localButtons;
 		article.appendChild(wrapper);
 	});
 };
 
-const getActiveTopicRule = () => topicRules.find((rule) => rule.label === conversationContext.topic) || null;
+const hasContinuingEducationGoalWithoutTopic = () => {
+	return conversationState.learningGoal === "Continuing Education" && !conversationState.topic;
+};
+
+const getActiveTopicRule = () => topicRules.find((rule) => rule.label === conversationState.topic) || null;
 
 const evaluateTopicRelevance = (course, topicRule) => {
 	if (!topicRule) {
@@ -552,9 +580,7 @@ const evaluateTopicRelevance = (course, topicRule) => {
 	const title = normalizeText(course.title);
 	const searchText = normalizeText(course.searchText);
 
-	const exactTopicMatch = topics.some((topicValue) =>
-		topicRule.topicAliases.some((alias) => topicValue === normalizeText(alias))
-	);
+	const exactTopicMatch = topics.some((topicValue) => topicRule.topicAliases.some((alias) => topicValue === normalizeText(alias)));
 	const categoryMatch = topicRule.topicAliases.some((alias) => category.includes(normalizeText(alias)));
 	const titlePhraseMatch = includesAny(title, topicRule.titleTerms);
 	const searchTextMatch = includesAny(searchText, topicRule.searchKeywords);
@@ -569,8 +595,7 @@ const evaluateTopicRelevance = (course, topicRule) => {
 
 		const industrialLike = category.includes("energy processes & technology") || category.includes("industrial automation");
 		if (industrialLike) {
-			const userIntent = getUserIntentText();
-			const allowIndustrial = includesAny(userIntent, industrialIntentTerms);
+			const allowIndustrial = includesAny(getUserIntentText(), industrialIntentTerms);
 			if (!allowIndustrial) {
 				relevant = false;
 			}
@@ -586,11 +611,39 @@ const evaluateTopicRelevance = (course, topicRule) => {
 	};
 };
 
+const getFoundationalBonus = (titleText) => {
+	let points = 0;
+	foundationalBonusRules.forEach((rule) => {
+		if (titleText.includes(rule.term)) {
+			points += rule.points;
+		}
+	});
+	return points;
+};
+
+const getContinuingEducationPriority = (course) => {
+	if (conversationState.learningGoal !== "Continuing Education") {
+		return 0;
+	}
+
+	const learningUnits = normalizeText(course.learningUnits);
+	if (!learningUnits) {
+		return 0;
+	}
+
+	let score = 10;
+	if (includesAny(learningUnits, cePriorityTerms)) {
+		score += 8;
+	}
+	return score;
+};
+
 const courseMatchesAudience = (course) => {
-	if (!conversationContext.audience) {
+	if (!conversationState.audience) {
 		return false;
 	}
-	return normalizeArray(course.audiences).some((audience) => normalizeText(audience) === normalizeText(conversationContext.audience));
+
+	return normalizeArray(course.audiences).some((audience) => normalizeText(audience) === normalizeText(conversationState.audience));
 };
 
 const scoreCourse = (course, topicRule) => {
@@ -622,33 +675,24 @@ const scoreCourse = (course, topicRule) => {
 		topicScore += 5;
 	}
 
-	const selectedRank = levelValue(conversationContext.experience);
+	const cePriority = getContinuingEducationPriority(course);
+	topicScore += cePriority;
+
+	const selectedRank = levelValue(conversationState.experienceLevel);
 	const courseRank = levelValue(course.experienceLevel);
 	const levelMatch = courseRank === selectedRank;
 	const isNextStep = courseRank === Math.min(3, selectedRank + 1);
-
 	const audienceMatch = courseMatchesAudience(course);
-	const titleComparable = normalizeComparableTitle(course.title);
-	const electrificationSubtopicRule =
-		conversationContext.topic === "Electrification & Decarbonization" ? getElectrificationSubtopicRule() : null;
-	const subtopicEvaluation = evaluateCourseElectrificationSubtopic(course, electrificationSubtopicRule);
-	const exactSubtopicBonus = subtopicEvaluation.hasExactSubtopicPhrase ? 12 : 0;
-	topicScore += exactSubtopicBonus;
-
-	// Title wording bonus is ranking-only and only compared among same structured level.
-	const foundationalScore = isBeginnerIntent() ? getFoundationalBonus(titleComparable) : 0;
+	const foundationalScore = isBeginnerIntent() ? getFoundationalBonus(normalizeComparableTitle(course.title)) : 0;
 
 	return {
 		topicRelevant: true,
 		topicScore,
+		cePriority,
 		foundationalScore,
 		audienceMatch,
 		isLevelMatch: levelMatch,
 		isNextStep,
-		isSubtopicMatch: subtopicEvaluation.isSubtopicMatch,
-		hasExactSubtopicPhrase: subtopicEvaluation.hasExactSubtopicPhrase,
-		matchedSubtopics: subtopicEvaluation.matchedSubtopics,
-		exactSubtopicBonus,
 		courseRank,
 		reasons: []
 	};
@@ -673,11 +717,8 @@ const compareCandidateRank = (a, b) => {
 	if (b.topicScore !== a.topicScore) {
 		return b.topicScore - a.topicScore;
 	}
-	if (Number(b.isSubtopicMatch) !== Number(a.isSubtopicMatch)) {
-		return Number(b.isSubtopicMatch) - Number(a.isSubtopicMatch);
-	}
-	if (b.exactSubtopicBonus !== a.exactSubtopicBonus) {
-		return b.exactSubtopicBonus - a.exactSubtopicBonus;
+	if (b.cePriority !== a.cePriority) {
+		return b.cePriority - a.cePriority;
 	}
 	if (a.courseRank === b.courseRank && b.foundationalScore !== a.foundationalScore) {
 		return b.foundationalScore - a.foundationalScore;
@@ -698,14 +739,13 @@ const buildCandidateList = () => {
 	}
 
 	const scored = courses
+		.filter((course) => !normalizeText(course.status).startsWith("hold"))
 		.map((course) => {
 			const scoredData = scoreCourse(course, topicRule);
-			const normalizedTitle = normalizeComparableTitle(course.title);
-			const seriesKey = normalizeComparableTitle(course.title, { stripSeriesMarkers: true });
 			return {
 				course,
-				normalizedTitle,
-				seriesKey,
+				normalizedTitle: normalizeComparableTitle(course.title),
+				seriesKey: normalizeComparableTitle(course.title, { stripSeriesMarkers: true }),
 				subjectKey: getSubjectKeyFromTitle(course.title),
 				startMs: getCourseStartMs(course),
 				partOrder: extractPartOrder(course.title),
@@ -721,11 +761,7 @@ const buildCandidateList = () => {
 			dedupedByTitle.set(item.normalizedTitle, item);
 			return;
 		}
-		if (item.startMs < existing.startMs) {
-			dedupedByTitle.set(item.normalizedTitle, item);
-			return;
-		}
-		if (item.startMs === existing.startMs && compareCandidateRank(item, existing) < 0) {
+		if (item.startMs < existing.startMs || (item.startMs === existing.startMs && compareCandidateRank(item, existing) < 0)) {
 			dedupedByTitle.set(item.normalizedTitle, item);
 		}
 	});
@@ -766,12 +802,7 @@ const buildCandidateList = () => {
 			.filter(Boolean)
 			.sort((a, b) => a.length - b.length);
 		const seriesName = cleanedNames[0] || cleanSeriesDisplayTitle(top.course.title) || "Course Series";
-
 		const allPartUrls = uniqueParts.map((part) => part.course.registrationUrl).filter(Boolean);
-		const hasDistinctPartUrls = allPartUrls.length === uniqueParts.length && new Set(allPartUrls).size === uniqueParts.length;
-
-		const experienceValues = new Set(uniqueParts.map((part) => normalizeText(part.course.experienceLevel)).filter(Boolean));
-		const deliveryValues = new Set(uniqueParts.map((part) => normalizeText(part.course.deliveryType)).filter(Boolean));
 
 		seriesCollapsed.push({
 			seriesKey,
@@ -779,6 +810,7 @@ const buildCandidateList = () => {
 			course: top.course,
 			startMs: top.startMs,
 			topicScore: top.topicScore,
+			cePriority: top.cePriority,
 			foundationalScore: top.foundationalScore,
 			audienceMatch: top.audienceMatch,
 			isLevelMatch: top.isLevelMatch,
@@ -788,9 +820,15 @@ const buildCandidateList = () => {
 			seriesItems: uniqueParts,
 			isSeries: uniqueParts.length > 1,
 			seriesName,
-			hasDistinctPartUrls,
-			seriesExperienceLevel: experienceValues.size === 1 ? uniqueParts[0].course.experienceLevel : "",
-			seriesDeliveryType: deliveryValues.size === 1 ? uniqueParts[0].course.deliveryType : ""
+			hasDistinctPartUrls: allPartUrls.length === uniqueParts.length && new Set(allPartUrls).size === uniqueParts.length,
+			seriesExperienceLevel:
+				new Set(uniqueParts.map((part) => normalizeText(part.course.experienceLevel)).filter(Boolean)).size === 1
+					? uniqueParts[0].course.experienceLevel
+					: "",
+			seriesDeliveryType:
+				new Set(uniqueParts.map((part) => normalizeText(part.course.deliveryType)).filter(Boolean)).size === 1
+					? uniqueParts[0].course.deliveryType
+					: ""
 		});
 	});
 
@@ -798,40 +836,35 @@ const buildCandidateList = () => {
 };
 
 const buildReasonsForRecommendation = (candidate) => {
-	const topicReason = `Matches your ${conversationContext.topic} interest`;
-	const selectedRank = levelValue(conversationContext.experience);
+	const topicReason = `Matches your ${conversationState.topic} interest`;
+	const selectedRank = levelValue(conversationState.experienceLevel);
 	const courseLevel = candidate.course.experienceLevel || "this";
 	const reasons = [];
 
 	if (candidate.isLevelMatch) {
 		reasons.push(topicReason);
-		reasons.push(`Matches your ${conversationContext.experience} experience level`);
-		return reasons;
-	}
-
-	if (selectedRank === 1 && candidate.courseRank === 2) {
+		reasons.push(`Matches your ${conversationState.experienceLevel} experience level`);
+	} else if (selectedRank === 1 && candidate.courseRank === 2) {
 		reasons.push(topicReason);
 		reasons.push("Intermediate next-step course");
 		reasons.push("Consider after completing foundational learning");
-		return reasons;
-	}
-
-	if (selectedRank === 1 && candidate.courseRank === 3) {
+	} else if (selectedRank === 1 && candidate.courseRank === 3) {
 		reasons.push(topicReason);
 		reasons.push("Advanced follow-on course");
 		reasons.push("Consider after completing foundational learning");
-		return reasons;
-	}
-
-	if (candidate.isNextStep) {
+	} else if (candidate.isNextStep) {
 		reasons.push(topicReason);
 		reasons.push(`${courseLevel} next-step course`);
 		reasons.push("Consider after completing foundational learning");
-		return reasons;
+	} else {
+		reasons.push(topicReason);
+		reasons.push(`${courseLevel} follow-on course`);
 	}
 
-	reasons.push(topicReason);
-	reasons.push(`${courseLevel} follow-on course`);
+	if (conversationState.learningGoal === "Continuing Education" && normalizeText(candidate.course.learningUnits)) {
+		reasons.push("Includes documented learning units");
+	}
+
 	return reasons;
 };
 
@@ -839,16 +872,12 @@ const pickRecommendations = (candidates) => {
 	if (!candidates.length) {
 		return {
 			currentLevel: [],
-			nextSteps: [],
-			relatedElectrification: []
+			nextSteps: []
 		};
 	}
 
-	const selectedRank = levelValue(conversationContext.experience);
+	const selectedRank = levelValue(conversationState.experienceLevel);
 	let pool = [...candidates].sort(compareCandidateRank);
-	const activeSubtopic = getElectrificationSubtopicRule();
-	const isElectrificationSubtopicMode =
-		conversationContext.topic === "Electrification & Decarbonization" && Boolean(activeSubtopic);
 
 	if (selectedRank === 1) {
 		const hasBeginnerOrIntermediate = pool.some((item) => item.courseRank === 1 || item.courseRank === 2);
@@ -888,43 +917,30 @@ const pickRecommendations = (candidates) => {
 	const currentBucket = pool.filter((item) => item.isLevelMatch);
 	const nextBucket = pool.filter((item) => !item.isLevelMatch && item.isNextStep);
 	const otherBucket = pool.filter((item) => !item.isLevelMatch && !item.isNextStep);
-	const directSubtopicCurrent = isElectrificationSubtopicMode
-		? currentBucket.filter((item) => item.isSubtopicMatch)
-		: currentBucket;
-	const relatedCurrent = isElectrificationSubtopicMode
-		? currentBucket.filter((item) => !item.isSubtopicMatch)
-		: [];
 
-	const currentLevel = takeUnique(directSubtopicCurrent, 3);
-	let relatedElectrification = [];
-
-	if (isElectrificationSubtopicMode && currentLevel.length < 3) {
-		let relatedPool = relatedCurrent;
-
-		if (activeSubtopic.key === "buildingElectrification") {
-			const nonEvOrAg = relatedPool.filter(
-				(item) => !item.matchedSubtopics.includes("transportationElectrification") && !item.matchedSubtopics.includes("agriculturalElectrification")
-			);
-			const hasEnoughBuildingRelevant = directSubtopicCurrent.length >= 3;
-			if (hasEnoughBuildingRelevant) {
-				relatedPool = nonEvOrAg;
-			} else if (nonEvOrAg.length) {
-				relatedPool = [...nonEvOrAg, ...relatedPool.filter((item) => !nonEvOrAg.includes(item))];
-			}
-		}
-
-		relatedElectrification = takeUnique(relatedPool, Math.max(0, 3 - currentLevel.length));
-	}
-
-	const maxNext = Math.max(0, 3 - currentLevel.length - relatedElectrification.length);
-
+	const currentLevel = takeUnique(currentBucket, 3);
+	const maxNext = Math.max(0, 3 - currentLevel.length);
 	const nextSteps = [...takeUnique(nextBucket, maxNext), ...takeUnique(otherBucket, Math.max(0, maxNext - nextBucket.length))].slice(0, maxNext);
 
 	return {
 		currentLevel,
-		nextSteps,
-		relatedElectrification
+		nextSteps
 	};
+};
+
+const addLearningUnitsIfNeeded = (container, course) => {
+	if (conversationState.learningGoal !== "Continuing Education") {
+		return;
+	}
+	const learningUnits = String(course.learningUnits || "").trim();
+	if (!learningUnits) {
+		return;
+	}
+
+	const units = document.createElement("p");
+	units.className = "course-description";
+	units.textContent = `Learning Units: ${learningUnits}`;
+	container.appendChild(units);
 };
 
 const createCourseCard = (course, reasons = []) => {
@@ -982,7 +998,9 @@ const createCourseCard = (course, reasons = []) => {
 		action.disabled = true;
 	}
 
-	card.append(title, category, metaRow, why, action);
+	card.append(title, category, metaRow);
+	addLearningUnitsIfNeeded(card, course);
+	card.append(why, action);
 	return card;
 };
 
@@ -1023,7 +1041,11 @@ const createSeriesCard = (seriesRecommendation) => {
 		li.className = "series-part-item";
 		const text = document.createElement("span");
 		text.className = "series-part-title";
-		text.textContent = entry.course.title;
+		let titleText = entry.course.title;
+		if (conversationState.learningGoal === "Continuing Education" && String(entry.course.learningUnits || "").trim()) {
+			titleText += ` (${entry.course.learningUnits})`;
+		}
+		text.textContent = titleText;
 		li.appendChild(text);
 
 		if (seriesRecommendation.item.hasDistinctPartUrls && entry.course.registrationUrl) {
@@ -1111,10 +1133,10 @@ const appendRecommendationSection = (headingText, recommendations) => {
 
 const buildNoCurrentLevelMessage = (result) => {
 	const hasIntermediateNext = result.nextSteps.some((entry) => levelValue(entry.item.course.experienceLevel) === 2);
-	if (conversationContext.topic === "HVAC/R" && normalizeText(conversationContext.experience) === "beginner" && hasIntermediateNext) {
+	if (conversationState.topic === "HVAC/R" && normalizeText(conversationState.experienceLevel) === "beginner" && hasIntermediateNext) {
 		return "I did not find a Beginner-level HVAC/R offering in the current class schedule. I found Intermediate courses that may be useful next steps after foundational learning.";
 	}
-	return `I did not find a ${conversationContext.experience}-level ${conversationContext.topic} offering in the current class schedule.`;
+	return `I did not find a ${conversationState.experienceLevel}-level ${conversationState.topic} offering in the current class schedule.`;
 };
 
 const renderRecommendations = (result) => {
@@ -1136,100 +1158,93 @@ const renderRecommendations = (result) => {
 	}
 
 	appendRecommendationSection("Recommended for Your Current Level", result.currentLevel);
-	if (result.relatedElectrification && result.relatedElectrification.length) {
-		appendRecommendationSection("Related Electrification Topics", result.relatedElectrification);
-	}
 	appendRecommendationSection("Suggested Next Steps", result.nextSteps);
 };
 
 const buildAssistantReply = (result) => {
 	const directCount = result.currentLevel.length;
 	const hasNext = result.nextSteps.length > 0;
-	const topic = conversationContext.topic;
-	const level = conversationContext.experience;
+	const topic = conversationState.topic;
+	const level = conversationState.experienceLevel;
 	const hasIntermediateNext = result.nextSteps.some((entry) => levelValue(entry.item.course.experienceLevel) === 2);
-	const beginnerHvacIntermediateSentence = "This Intermediate course may be a useful next step after foundational HVAC/R learning.";
 
 	if (topic === "HVAC/R" && normalizeText(level) === "beginner" && directCount === 0 && hasIntermediateNext) {
 		return "I did not find a Beginner-level HVAC/R offering in the current class schedule. I found Intermediate courses that may be useful next steps after foundational learning.";
 	}
 
 	if (directCount === 1) {
-		let response = `I found 1 course that matches your ${topic} interest and ${level} experience, plus additional next-step options.`;
-		if (topic === "HVAC/R" && normalizeText(level) === "beginner" && hasIntermediateNext) {
-			response += ` ${beginnerHvacIntermediateSentence}`;
-		}
-		return response;
+		return `I found 1 course that matches your ${topic} interest and ${level} experience, plus additional next-step options.`;
 	}
-
 	if (directCount >= 2) {
 		if (hasNext) {
-			let response = `I found ${directCount} courses that match your ${topic} interest and ${level} experience, plus additional next-step options.`;
-			if (topic === "HVAC/R" && normalizeText(level) === "beginner" && hasIntermediateNext) {
-				response += ` ${beginnerHvacIntermediateSentence}`;
-			}
-			return response;
+			return `I found ${directCount} courses that match your ${topic} interest and ${level} experience, plus additional next-step options.`;
 		}
 		return `I found ${directCount} courses that match your ${topic} interest and ${level} experience.`;
 	}
-
 	if (hasNext) {
 		return `I did not find a ${level}-level ${topic} offering in the current class schedule. I found next-step options that may be useful after foundational learning.`;
 	}
-
 	return `I did not find a ${level}-level ${topic} offering in the current class schedule.`;
 };
 
-const resetAssistant = () => {
-	resetConversationContext();
-	assistantMessages.innerHTML = "";
-	appendMessage("assistant", initialAssistantGreeting);
-	clearRecommendations(initialRecommendationMessage);
-	assistantInput.value = "";
-	assistantInput.focus();
-
-	if (courses.length) {
-		setStatus("Conversation reset. Share your role, topic, and experience level to get recommendations.");
-		return;
-	}
-
-	setStatus("Conversation reset. Course data is still loading.");
+const requestExperienceLevel = () => {
+	appendQuickReplyQuestion(
+		"Would you describe your current knowledge as beginner, intermediate, or advanced?",
+		experienceQuickReplies,
+		"experienceQuickReply"
+	);
+	setStatus("Waiting for experience level.");
+	clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
 };
 
-const handleMessage = (message) => {
-	if (!courses.length) {
-		appendMessage("assistant", "Course data is still loading. Please try again in a moment.");
-		setStatus("Course data is still loading.");
+const requestTopicForContinuingEducation = () => {
+	appendQuickReplyQuestion(
+		"What topic would you like continuing education opportunities in?",
+		continuingEducationTopicReplies,
+		"topicQuickReply"
+	);
+	setStatus("Waiting for topic selection.");
+	clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
+};
+
+const requestTopic = () => {
+	appendQuickReplyQuestion(
+		"Which area are you interested in learning about?",
+		topicQuickReplies,
+		"topicQuickReply"
+	);
+	setStatus("Waiting for topic selection.");
+	clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
+};
+
+const maybeRenderWhatIUnderstood = (beforeSnapshot) => {
+	if (beforeSnapshot !== snapshotConversationState()) {
+		renderWhatIUnderstood();
+	}
+};
+
+const processConversation = () => {
+	if (!conversationState.topic && conversationState.learningGoal === "Continuing Education") {
+		requestTopicForContinuingEducation();
 		return;
 	}
 
-	updateContextFromMessage(message);
-	renderWhatIUnderstood();
-
-	if (!conversationContext.topic && hasContinuingEducationIntent(message)) {
-		appendTopicQuickReplies(
-			"What topic would you like continuing education opportunities in?",
-			continuingEducationTopicReplies
-		);
-		setStatus("Waiting for topic selection before generating recommendations.");
-		clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
+	if (conversationState.topic && !conversationState.experienceLevel) {
+		requestExperienceLevel();
 		return;
 	}
 
-	if (conversationContext.topic && !conversationContext.experience) {
-		conversationContext.awaitingExperience = true;
-		appendMessage("assistant", "Would you describe your current knowledge as beginner, intermediate, or advanced?");
-		setStatus("Waiting for experience level before generating recommendations.");
-		clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
+	if (!conversationState.topic && conversationState.experienceLevel) {
+		requestTopic();
 		return;
 	}
 
-	if (!conversationContext.topic || !conversationContext.experience) {
-		setStatus("Please share a topic and experience level to continue.");
-		clearRecommendations("Recommendations will appear after both topic and experience level are provided.");
+	if (!conversationState.topic && !conversationState.experienceLevel) {
+		requestTopic();
 		return;
 	}
 
+	clearActiveQuickReplies();
 	const candidates = buildCandidateList();
 	const recommendationResult = pickRecommendations(candidates);
 	renderRecommendations(recommendationResult);
@@ -1237,29 +1252,72 @@ const handleMessage = (message) => {
 	setStatus(`${recommendationResult.currentLevel.length} direct recommendation${recommendationResult.currentLevel.length === 1 ? "" : "s"} updated.`);
 };
 
+const submitUserMessage = (message, options = {}) => {
+	if (!courses.length) {
+		appendMessage("assistant", "Course data is still loading. Please try again in a moment.");
+		setStatus("Course data is still loading.");
+		return;
+	}
+
+	appendMessage("user", message);
+	const beforeSnapshot = snapshotConversationState();
+	updateStateFromMessage(message, options);
+	maybeRenderWhatIUnderstood(beforeSnapshot);
+	setStatus("Generating recommendations...");
+	processConversation();
+};
+
+const resetSuggestedPrompts = () => {
+	if (!suggestedPromptContainer) {
+		return;
+	}
+	const buttons = Array.from(suggestedPromptContainer.querySelectorAll(".prompt-chip"));
+	buttons.forEach((button, index) => {
+		button.textContent = suggestedPrompts[index] || "";
+		button.dataset.prompt = suggestedPrompts[index] || "";
+		button.disabled = false;
+	});
+};
+
+const resetAssistant = () => {
+	resetConversationState();
+	assistantMessages.innerHTML = "";
+	appendMessage("assistant", initialAssistantGreeting);
+	clearRecommendations(initialRecommendationMessage);
+	clearActiveQuickReplies();
+	resetSuggestedPrompts();
+	assistantInput.value = "";
+	setStatus("");
+	assistantInput.focus();
+};
+
 assistantForm.addEventListener("submit", (event) => {
 	event.preventDefault();
-
 	const message = assistantInput.value.trim();
 	if (!message) {
 		setStatus("Please enter a message before sending.");
 		return;
 	}
-
-	appendMessage("user", message);
 	assistantInput.value = "";
-	setStatus("Generating recommendations...");
-	handleMessage(message);
+	submitUserMessage(message, { source: "user" });
 });
 
-promptButtons.forEach((button) => {
-	button.addEventListener("click", () => {
-		const prompt = button.dataset.prompt || "";
-		assistantInput.value = prompt;
-		assistantInput.focus();
-		setStatus("Suggested prompt added to the message box.");
+const bindSuggestedPromptButtons = () => {
+	const buttons = Array.from(document.querySelectorAll(".prompt-list .prompt-chip"));
+	buttons.forEach((button, index) => {
+		button.addEventListener("click", () => {
+			if (button.disabled) {
+				return;
+			}
+			setButtonsDisabled(buttons, true);
+			const prompt = button.dataset.prompt || button.textContent || suggestedPrompts[index];
+			submitUserMessage(prompt, { source: "suggestedPrompt" });
+			window.setTimeout(() => {
+				setButtonsDisabled(buttons, false);
+			}, 350);
+		});
 	});
-});
+};
 
 if (assistantReset) {
 	assistantReset.addEventListener("click", resetAssistant);
@@ -1285,4 +1343,5 @@ const loadCourses = async () => {
 	}
 };
 
+bindSuggestedPromptButtons();
 loadCourses();
