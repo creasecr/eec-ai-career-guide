@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Southern California Edison Energy Education Center Career Pathway Guide</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="sce-logo-area" aria-label="Southern California Edison branding">
+                <div class="logo-block" aria-hidden="true">
+                    <img
+                        class="edison-logo"
+                        src="EdisonLogoLight.svg"
+                        alt="">
+                </div>
+                <div class="wordmark">
+                    <p class="kicker">Southern California Edison</p>
+                    <p class="brand-title">Energy Education Center</p>
+                </div>
+            </div>
+            <div class="nav-utility" aria-hidden="true">
+                Career Pathway Guide
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" aria-label="Career pathway guide introduction">
+        <div class="hero-content">
+            <p class="hero-tag">ENERGY EDUCATION CENTER</p>
+            <h1>Find the Right Learning Path</h1>
+            <p>
+                Answer a few questions to discover classes and training opportunities aligned to your goals.
+            </p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="progress-wrap" aria-label="Questionnaire progress">
+            <div class="progress-step is-active" data-step="profile" aria-live="polite">
+                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-label">Profile</span>
+            </div>
+            <div class="progress-step" data-step="interests" aria-live="polite">
+                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-label">Interests</span>
+            </div>
+            <div class="progress-step" data-step="experience" aria-live="polite">
+                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-label">Experience</span>
+            </div>
+            <div class="progress-step" data-step="recommendations" aria-live="polite">
+                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-label">Recommendations</span>
+            </div>
+        </section>
+
+        <form class="questionnaire" aria-label="Career pathway questionnaire">
+            <section class="panel" aria-labelledby="who-are-you">
+                <h2 id="who-are-you"><span class="section-icon" aria-hidden="true">&#128100;</span>1. User Type</h2>
+                <div class="option-grid option-grid-5">
+                    <label class="option-card"><input type="radio" name="audience" value="Contractor">Contractor</label>
+                    <label class="option-card"><input type="radio" name="audience" value="Student">Student</label>
+                    <label class="option-card"><input type="radio" name="audience" value="Government">Government</label>
+                    <label class="option-card"><input type="radio" name="audience" value="Educator">Educator</label>
+                    <label class="option-card"><input type="radio" name="audience" value="Commercial Customer">Commercial Customer</label>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="topics-interest">
+                <h2 id="topics-interest"><span class="section-icon" aria-hidden="true">&#9881;</span>2. Topics of Interest</h2>
+                <p class="helper-text">Select all that apply.</p>
+                <div class="option-grid option-grid-5">
+                    <label class="option-card"><input type="checkbox" name="topics" value="Electrification &amp; Decarbonization">Electrification &amp; Decarbonization</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="HVAC/R">HVAC/R</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Energy Codes &amp; Standards">Energy Codes &amp; Standards</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Building Performance">Building Performance</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Agriculture &amp; Irrigation">Agriculture &amp; Irrigation</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Foodservice">Foodservice</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Lighting">Lighting</label>
+                    <label class="option-card"><input type="checkbox" name="topics" value="Industrial Automation">Industrial Automation</label>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="experience-level">
+                <h2 id="experience-level"><span class="section-icon" aria-hidden="true">&#128200;</span>3. Experience Level</h2>
+                <div class="option-grid option-grid-3">
+                    <label class="option-card"><input type="radio" name="experience" value="Beginner">Beginner</label>
+                    <label class="option-card"><input type="radio" name="experience" value="Intermediate">Intermediate</label>
+                    <label class="option-card"><input type="radio" name="experience" value="Advanced">Advanced</label>
+                </div>
+            </section>
+
+            <button type="button" id="findPathButton" class="cta-button">4. Find My Learning Path</button>
+
+            <div class="recommendations-panel" aria-labelledby="recommendations-title">
+                <h2 id="recommendations-title">Recommendations</h2>
+                <div id="recommendationsArea" class="recommendations-area">
+                    <p class="empty-state">Your top 3 recommended classes will appear here.</p>
+                </div>
+            </div>
+        </form>
+
+        <section class="pathway-panel" aria-labelledby="pathway-title">
+            <h2 id="pathway-title">Suggested Learning Path</h2>
+            <div id="pathCourseGrid" class="path-course-grid">
+                <p class="empty-state">Beginner to Advanced pathway recommendations will appear here.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
