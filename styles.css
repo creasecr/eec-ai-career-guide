@@ -85,6 +85,29 @@ body {
     font-weight: 600;
 }
 
+.assistant-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.assistant-nav a {
+    color: #222222;
+    text-decoration: none;
+    border: 1px solid #dddddd;
+    border-radius: 999px;
+    padding: 0.38rem 0.72rem;
+    font-weight: 700;
+}
+
+.assistant-nav a[aria-current="page"] {
+    background: #f2c300;
+    border-color: #d6aa00;
+}
+
 .kicker {
     margin: 0;
     color: #444444;
@@ -539,6 +562,10 @@ body {
     }
 
     .nav-utility {
+        display: none;
+    }
+
+    .assistant-nav {
         display: none;
     }
 
