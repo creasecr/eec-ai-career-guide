@@ -47,22 +47,23 @@ body {
 }
 
 .logo-block {
-    width: 170px;
-    min-width: 170px;
-    height: 70px;
-    border-radius: 12px;
+    width: 225px;
+    min-width: 225px;
+    height: 117px;
+    margin-top: -1.2rem;
+    border-radius: 0 0 22px 22px;
     background: var(--sce-gold);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 16px;
+    padding: 13px 18px;
     box-shadow: 0 10px 20px rgba(132, 101, 0, 0.18);
     overflow: hidden;
 }
 
 .edison-logo {
     width: 100%;
-    max-width: 146px;
+    max-width: 185px;
     height: auto;
     object-fit: contain;
     display: block;
@@ -559,6 +560,9 @@ body {
 @media (max-width: 700px) {
     .topbar-inner {
         padding: 1rem 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.7rem;
     }
 
     .nav-utility {
@@ -566,15 +570,24 @@ body {
     }
 
     .assistant-nav {
-        display: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.4rem;
+        font-size: 0.67rem;
+    }
+
+    .assistant-nav a {
+        padding: 0.34rem 0.58rem;
     }
 
     .logo-block {
-        width: min(46vw, 170px);
+        width: min(46vw, 190px);
         min-width: 136px;
-        height: 56px;
-        border-radius: 10px;
-        padding: 7px 10px;
+        height: 92px;
+        margin-top: -1rem;
+        border-radius: 0 0 14px 14px;
+        padding: 11px 14px;
     }
 
     .brand-title {
