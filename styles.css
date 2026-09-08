@@ -818,6 +818,12 @@ body {
     font-weight: 700;
 }
 
+.home-page .assistant-panel .eyebrow,
+.home-page .stats .eyebrow,
+.home-page .stats-note {
+    color: var(--sce-gold);
+}
+
 .home-page .home-hero h1 {
     margin: 0.45rem 0 0.75rem;
     color: #111111;
@@ -1060,7 +1066,7 @@ body {
 
 .home-page .stats-note {
     font-size: 0.82rem;
-    color: #c9d8dd;
+    color: var(--sce-gold);
     margin-top: 18px;
 }
 
