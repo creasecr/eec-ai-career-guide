@@ -869,7 +869,7 @@ body {
     width: 100%;
     max-width: none;
     margin: 0;
-    padding: 0 0 3rem;
+    padding: 0;
 }
 
 .home-page .home-main > section {
@@ -942,7 +942,17 @@ body {
 }
 
 .home-page .icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     font-size: 1.7rem;
+    color: var(--sce-gold);
+    margin-bottom: 0.35rem;
+}
+
+.home-page .icon i {
+    display: inline-block;
+    line-height: 1;
 }
 
 .home-page .small-link,
@@ -1150,6 +1160,7 @@ body {
     background: var(--sce-blue);
     color: #d9e6e9;
     padding: 42px 0;
+    margin-top: 0;
 }
 
 .home-page .footer-grid {
