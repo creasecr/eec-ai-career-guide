@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -48,26 +49,26 @@
     <main class="container">
         <section class="progress-wrap" aria-label="Questionnaire progress">
             <div class="progress-step is-active" data-step="profile" aria-live="polite">
-                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                 <span class="step-label">Profile</span>
             </div>
             <div class="progress-step" data-step="interests" aria-live="polite">
-                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                 <span class="step-label">Interests</span>
             </div>
             <div class="progress-step" data-step="experience" aria-live="polite">
-                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                 <span class="step-label">Experience</span>
             </div>
             <div class="progress-step" data-step="recommendations" aria-live="polite">
-                <span class="step-check" aria-hidden="true">&#10003;</span>
+                <span class="step-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                 <span class="step-label">Recommendations</span>
             </div>
         </section>
 
         <form class="questionnaire" aria-label="Career pathway questionnaire">
             <section class="panel" aria-labelledby="who-are-you">
-                <h2 id="who-are-you"><span class="section-icon" aria-hidden="true">&#128100;</span>1. User Type</h2>
+                <h2 id="who-are-you"><span class="section-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>1. User Type</h2>
                 <div class="option-grid option-grid-5">
                     <label class="option-card"><input type="radio" name="audience" value="Contractor">Contractor</label>
                     <label class="option-card"><input type="radio" name="audience" value="Student">Student</label>
@@ -78,7 +79,7 @@
             </section>
 
             <section class="panel" aria-labelledby="topics-interest">
-                <h2 id="topics-interest"><span class="section-icon" aria-hidden="true">&#9881;</span>2. Topics of Interest</h2>
+                <h2 id="topics-interest"><span class="section-icon" aria-hidden="true"><i class="fa-solid fa-gear"></i></span>2. Topics of Interest</h2>
                 <p class="helper-text">Select all that apply.</p>
                 <div class="option-grid option-grid-5">
                     <label class="option-card"><input type="checkbox" name="topics" value="Electrification &amp; Decarbonization">Electrification &amp; Decarbonization</label>
@@ -93,7 +94,7 @@
             </section>
 
             <section class="panel" aria-labelledby="experience-level">
-                <h2 id="experience-level"><span class="section-icon" aria-hidden="true">&#128200;</span>3. Experience Level</h2>
+                <h2 id="experience-level"><span class="section-icon" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>3. Experience Level</h2>
                 <div class="option-grid option-grid-3">
                     <label class="option-card"><input type="radio" name="experience" value="Beginner">Beginner</label>
                     <label class="option-card"><input type="radio" name="experience" value="Intermediate">Intermediate</label>
