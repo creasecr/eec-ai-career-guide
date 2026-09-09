@@ -570,15 +570,22 @@ body {
     }
 
     .assistant-nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.4rem;
         font-size: 0.67rem;
     }
 
     .assistant-nav a {
-        padding: 0.34rem 0.58rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 2.8rem;
+        padding: 0.34rem 0.45rem;
+        text-align: center;
+        line-height: 1.15;
+        white-space: normal;
     }
 
     .logo-block {
