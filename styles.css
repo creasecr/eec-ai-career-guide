@@ -1206,14 +1206,41 @@ body {
     }
 
     .home-page .assistant-nav {
-        flex-wrap: wrap;
-        justify-content: flex-start;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.4rem;
         font-size: 0.67rem;
     }
 
     .home-page .assistant-nav a {
-        padding: 0.34rem 0.58rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        min-height: 2.1rem;
+        padding: 0.34rem 0.45rem;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 600px) {
+    .assistant-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.4rem;
+        font-size: 0.67rem;
+    }
+
+    .assistant-nav a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        min-height: 2.1rem;
+        padding: 0.34rem 0.45rem;
+        white-space: nowrap;
     }
 
     .home-page .home-hero .hero-content {
