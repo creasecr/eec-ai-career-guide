@@ -716,6 +716,7 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: 0.22rem;
+    line-height: normal;
 }
 
 .home-page .kicker {
