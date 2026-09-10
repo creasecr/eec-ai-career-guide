@@ -974,6 +974,10 @@ body {
     background: transparent;
 }
 
+.home-page .energy-user-pathways {
+    margin-top: 64px;
+}
+
 .home-page .cards {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -1008,6 +1012,34 @@ body {
     font-size: 0.78rem;
     font-weight: 800;
     padding: 6px 10px;
+}
+
+.home-page .card-resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 14px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.home-page .feature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #d5e0ec;
+    border-radius: 999px;
+    background: #f7f9fb;
+    color: #4f5c66;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    padding: 4px 7px;
+    white-space: nowrap;
+}
+
+.home-page .feature-badge > span {
+    color: var(--sce-blue);
+    font-weight: 800;
 }
 
 .home-page .card a {
@@ -1292,5 +1324,242 @@ body {
     .home-page .footer-grid {
         align-items: flex-start;
         flex-direction: column;
+    }
+}
+
+.hvac-page .hvac-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(23rem, 44vw, 34rem);
+    display: grid;
+    align-items: center;
+    background: var(--sce-blue-deep) url("https://images.pexels.com/photos/32497161/pexels-photo-32497161.jpeg") center center / cover no-repeat;
+    color: #ffffff;
+}
+
+.hvac-page .hvac-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+}
+
+.hvac-page .hvac-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+}
+
+.hvac-page .hvac-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 4.8rem 1.3rem;
+}
+
+.hvac-page .hvac-hero .hero-tag {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.hvac-page .hvac-hero h1 {
+    max-width: 780px;
+    margin: 0.45rem 0 0.75rem;
+    color: #ffffff;
+    font-size: clamp(2.35rem, 5vw, 4.4rem);
+    line-height: 1.04;
+}
+
+.hvac-page .hvac-hero p:not(.hero-tag) {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+
+.hvac-page .hvac-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.6rem;
+}
+
+.hvac-page .button-secondary {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.75);
+    color: #ffffff;
+}
+
+.hvac-page .button-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ffffff;
+}
+
+.hvac-page .hvac-section,
+.hvac-page .hvac-assistant-section {
+    padding: 78px 0;
+}
+
+.hvac-page .hvac-soft-section {
+    background: #f7f9fb;
+    border-top: 1px solid #e5eaf0;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.hvac-page .hvac-two-column {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 42px;
+    align-items: start;
+}
+
+.hvac-page .hvac-copy {
+    color: var(--muted);
+    font-size: 1.08rem;
+}
+
+.hvac-page .hvac-copy p:first-child {
+    margin-top: 0;
+}
+
+.hvac-page .hvac-copy p:last-child {
+    margin-bottom: 0;
+}
+
+.hvac-page .hvac-card-grid,
+.hvac-page .hvac-skill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.hvac-page .hvac-info-card,
+.hvac-page .hvac-placeholder-card {
+    min-height: 220px;
+}
+
+.hvac-page .hvac-info-card .icon {
+    color: var(--sce-gold-deep);
+}
+
+.hvac-page .hvac-info-card h3,
+.hvac-page .hvac-placeholder-card h3 {
+    margin-top: 14px;
+}
+
+.hvac-page .hvac-skill-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.hvac-page .hvac-skill {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 76px;
+    padding: 18px 20px;
+    border-left: 3px solid var(--sce-gold);
+    background: #ffffff;
+    box-shadow: var(--home-shadow-soft);
+}
+
+.hvac-page .hvac-skill i {
+    flex: 0 0 1.5rem;
+    color: var(--sce-blue);
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.hvac-page .hvac-skill h3 {
+    margin: 0;
+    color: #111111;
+    font-size: 1rem;
+}
+
+.hvac-page .hvac-placeholder-card .tag {
+    background: #edf4f3;
+    border-color: #dce6e3;
+}
+
+.hvac-page .hvac-course-card {
+    min-height: 340px;
+}
+
+.hvac-page .hvac-course-card h3 {
+    margin-bottom: 10px;
+}
+
+.hvac-page .hvac-course-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 12px;
+}
+
+.hvac-page .hvac-course-meta span {
+    border: 1px solid #d5e0ec;
+    border-radius: 999px;
+    background: #f7f9fb;
+    color: #4f5c66;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    padding: 4px 7px;
+}
+
+.hvac-page .hvac-course-meta strong {
+    margin-right: 4px;
+    color: var(--sce-blue);
+}
+
+.hvac-page .hvac-learning-units {
+    color: #666666;
+    font-size: 0.78rem;
+}
+
+.hvac-page .hvac-course-card .register-button {
+    margin-top: auto;
+}
+
+.hvac-page .hvac-feature-panel {
+    padding: 34px;
+    border: 1px solid #d5e0ec;
+    background: #ffffff;
+    box-shadow: var(--home-shadow-soft);
+}
+
+.hvac-page .hvac-assistant-section {
+    padding-top: 0;
+}
+
+@media (max-width: 900px) {
+    .hvac-page .hvac-card-grid,
+    .hvac-page .hvac-skill-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hvac-page .hvac-two-column {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+@media (max-width: 620px) {
+    .hvac-page .hvac-hero-content {
+        padding: 3.5rem 1rem;
+    }
+
+    .hvac-page .hvac-hero-actions,
+    .hvac-page .hvac-hero-actions .button {
+        width: 100%;
+    }
+
+    .hvac-page .hvac-card-grid,
+    .hvac-page .hvac-skill-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hvac-page .hvac-section {
+        padding: 58px 0;
+    }
+
+    .hvac-page .hvac-feature-panel {
+        padding: 24px;
     }
 }
